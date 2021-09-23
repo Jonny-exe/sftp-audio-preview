@@ -50,12 +50,11 @@ class Form(QDialog):
         if self.remove_file.isChecked():
             if exists("audio"):
                 os.remove("audio")
-        event.accept()
-        print(event)
         try:
             self.p.terminate()
         except Exception:
             pass
+        event.accept()
 
 
     # Greets the user

@@ -6,11 +6,17 @@ from os import path
 from os.path import exists
 from playsound import playsound
 import multiprocessing
+import pysftp
 
 CACHE_FILE = "cache.json"
 logging.basicConfig(filename='gui.log', level=logging.DEBUG)
  
 def connect_and_getfile(url, user, password, filename, remove_file):
+
+
+    sftp = pysftp.Connection(url, username=user, password=password)
+    sftp.get(filename, "audio")
+    """
     try:
         ftpObject = FTP(url);
     except Exception:
@@ -20,6 +26,7 @@ def connect_and_getfile(url, user, password, filename, remove_file):
 
     ftpObject.login(user, password);
     ftpObject.retrbinary(f"RETR {filename}", open("audio", 'wb').write);
+    """
 
     save_cache(url, user, password, filename, remove_file)
 
@@ -43,7 +50,7 @@ def save_cache(url, user, password, filename, remove_file):
 
 def load_cache():
     if not exists(CACHE_FILE):
-        return "", "", "", "", ""
+        return "", "", "", "", True
     with open(CACHE_FILE, 'r') as openfile:
         obj = json.load(openfile)
 
