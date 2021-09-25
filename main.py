@@ -14,7 +14,7 @@ logging.basicConfig(filename="gui.log", level=logging.DEBUG)
 
 def connect_sftp(url, user, password, remove_file):
     cnopts = pysftp.CnOpts()
-    cnopts.known_hosts = None
+    cnopts.hostkeys = None
     conn = pysftp.Connection(url, username=user, password=password, cnopts=cnopts)
     conn.cd("~")
     # save_cache(url, user, password, "audio.m4a", remove_file)
