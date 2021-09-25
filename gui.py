@@ -32,13 +32,12 @@ class Form(QMainWindow):
         self.widget = QWidget()
 
         # Create widgets
-        url, user, password, filename, remove_file = load_cache()
+        url, user, password, remove_file = load_cache()
         self.text = QLabel("Play audio files through ftp")
         # self.text_status = QLabel("Status:\n")
         self.edit_user = QLineEdit(user)
         self.edit_password = QLineEdit(password)
         self.edit_url = QLineEdit(url)
-        self.edit_filename = QLineEdit(filename)
         self.remove_file = QCheckBox("Remove file afterwards")
         self.button_connect = QPushButton("Connect and get file")
         self.button_stop = QPushButton("Stop audio")
@@ -54,7 +53,6 @@ class Form(QMainWindow):
         self.layout.addWidget(self.edit_url)
         self.layout.addWidget(self.edit_user)
         self.layout.addWidget(self.edit_password)
-        self.layout.addWidget(self.edit_filename)
         self.layout.addWidget(self.remove_file)
         self.layout.addWidget(self.button_connect)
         self.layout.addWidget(self.files_container)
@@ -63,7 +61,6 @@ class Form(QMainWindow):
         self.edit_user.setPlaceholderText("user")
         self.edit_password.setPlaceholderText("password")
         self.edit_password.setEchoMode(QLineEdit.Password)
-        self.edit_filename.setPlaceholderText("filename")
         self.remove_file.setChecked(remove_file)
         self.button_connect.clicked.connect(self.connect)
         self.button_stop.clicked.connect(self.stop)
@@ -92,9 +89,7 @@ class Form(QMainWindow):
         url = self.edit_url.text()
         user = self.edit_user.text()
         password = self.edit_password.text()
-        # filename = self.edit_filename.text()
         remove_file = self.remove_file.isChecked()
-        # response = connect_and_getfile(url, user, password, remove_file)
         conn = connect_sftp(url, user, password, remove_file)
         if isinstance(conn, Exception):
             self.close()
@@ -106,6 +101,7 @@ class Form(QMainWindow):
          
         get_file(conn, filename)
         self.p = play()
+        print("After")
         self.layout.addWidget(self.button_stop)
     
     def add_dirs(self, conn, path=None):
