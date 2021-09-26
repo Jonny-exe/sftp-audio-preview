@@ -41,6 +41,7 @@ class Form(QMainWindow):
         self.remove_file = QCheckBox("Remove file afterwards")
         self.button_connect = QPushButton("Connect and get file")
         self.button_stop = QPushButton("Stop audio")
+        self.path = QLabel("path")
         self.files_container = QGroupBox()
         self.files = QVBoxLayout()
         self.files_container.setLayout(self.files)
@@ -55,6 +56,7 @@ class Form(QMainWindow):
         self.layout.addWidget(self.edit_password)
         self.layout.addWidget(self.remove_file)
         self.layout.addWidget(self.button_connect)
+        self.layout.addWidget(self.path)
         self.layout.addWidget(self.files_container)
 
         self.edit_url.setPlaceholderText("url")
@@ -97,16 +99,14 @@ class Form(QMainWindow):
         dirs = self.add_dirs(conn)
 
     def get_and_play(self, conn, filename):
-        print("Get and play", filename)
-         
         get_file(conn, filename)
         self.p = play()
-        print("After")
         self.layout.addWidget(self.button_stop)
     
     def add_dirs(self, conn, path=None):
         if path is not None:
             conn.chdir(path)
+        self.path.setText(conn.pwd)
         dirs = conn.listdir(conn.pwd)
 
         while self.files.count() != 0:
@@ -116,7 +116,6 @@ class Form(QMainWindow):
         self.files.addWidget(self.button_back)
         self.button_back.clicked.connect(partial(self.add_dirs, conn, path=".."))
 
-        print(self.files.count())
         for folder_name in dirs:
             isdir = conn.isdir(folder_name)
             label = QPushButton(folder_name + " * " * int(isdir))
